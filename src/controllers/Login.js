@@ -1,8 +1,5 @@
-require('dotenv/config');
-const jwt = require('jsonwebtoken');
 const UserService = require('../services/UserService');
-
-const secret = process.env.JWT_SECRET || 'maçãemel';
+const generateToken = require('../utils/generateToken');
 
 module.exports = async (req, res) => {
   try {
@@ -13,12 +10,7 @@ module.exports = async (req, res) => {
       return res.status(400).json({ message: 'Invalid fields' });
     }
 
-    const jwtConfig = {
-      expiresIn: '30m',
-      algorithm: 'HS256',
-    };
-
-    const token = jwt.sign({ data: { userId: user.id } }, secret, jwtConfig);
+    const token = generateToken(user);
 
     res.status(200).json({ token });
   } catch (error) {
