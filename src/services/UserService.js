@@ -12,7 +12,15 @@ const getAllUsers = async () => {
 
 const getUserByEmail = async (email) => User.findOne({ where: { email } });
 
-const getUserById = async (userId) => User.findByPk(userId);
+const getUserById = async (userId) => {
+  const user = await User.findByPk(userId, {
+    attributes: {
+      exclude: ['password'],
+    },
+  });
+
+  return camelize(user);
+};
 
 const createUser = async ({ displayName, email, password, image }) => {
   const newUser = await User.create({ displayName, email, password, image });

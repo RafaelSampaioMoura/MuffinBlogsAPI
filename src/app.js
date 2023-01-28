@@ -10,6 +10,7 @@ const app = express();
 
 app.use(express.json());
 
+app.get('/user/:id', tokenExists, tokenIsValid, UserController.getUserById);
 app.get('/user', tokenExists, tokenIsValid, UserController.getAllUsers);
 app.post('/login', loginValidation.validateBody, Login);
 app.post(
