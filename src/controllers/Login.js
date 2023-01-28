@@ -11,7 +11,7 @@ module.exports = async (req, res) => {
     }
 
     const token = generateToken(user);
-
+  
     res.status(200).json({ token });
   } catch (error) {
     return res

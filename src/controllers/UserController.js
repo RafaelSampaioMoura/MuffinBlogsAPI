@@ -1,6 +1,16 @@
 const UserService = require('../services/UserService');
 const generateToken = require('../utils/generateToken');
 
+const getAllUsers = async (_req, res) => {
+  try {
+    const users = await UserService.getAllUsers();
+
+    return res.status(200).json(users);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
 const createUser = async (req, res) => {
   try {
     const { body } = req;
@@ -25,4 +35,4 @@ const createUser = async (req, res) => {
   }
 };
 
-module.exports = { createUser };
+module.exports = { createUser, getAllUsers };
