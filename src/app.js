@@ -68,6 +68,15 @@ app.put(
   PostController.updatePost,
 );
 
+app.delete(
+  '/post/:id',
+  tokenExists,
+  tokenIsValid,
+  postValidations.postExists,
+  postValidations.verifyUser,
+  PostController.deletePost,
+);
+
 // É importante exportar a constante `app`,
 // para que possa ser utilizada pelo arquivo `src/server.js`
 module.exports = app;

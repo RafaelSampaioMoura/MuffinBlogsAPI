@@ -48,8 +48,8 @@ const getPostById = async (req, res) => {
 
 const updatePost = async (req, res) => {
   try {
-    const { body, params, user } = req;
-    console.log(user);
+    const { body, params } = req;
+    // console.log(user);
     const { id } = params;
     await PostService.updatePost(id, body);
     const updatedPost = await PostService.getPostById(id);
@@ -60,9 +60,20 @@ const updatePost = async (req, res) => {
   }
 };
 
+const deletePost = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await PostService.deletePost(id);
+    return res.status(204).json({ message: '' });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   createNewPost,
   getPostsByUserId,
   getPostById,
   updatePost,
+  deletePost,
 };

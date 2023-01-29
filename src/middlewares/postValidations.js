@@ -46,7 +46,10 @@ const allCategoriesExist = async (req, res, next) => {
 
 const verifyUser = async (req, res, next) => {
   const { id } = req.user.dataValues;
-  const post = await PostService.getPostById(id);
+  const { params } = req;
+  const post = await PostService.getPostById(params.id);
+
+  console.log(post);
 
   if (id !== post.userId) {
     return res.status(401).json({

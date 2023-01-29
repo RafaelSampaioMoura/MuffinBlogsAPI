@@ -65,18 +65,18 @@ const updatePost = async (postId, { title, content }) => {
     { title, content, update: Date.now() },
     {
       where: { id: postId },
-      include: [
-        { model: User, as: 'user', attributes: { exclude: ['password'] } },
-        {
-          model: Category,
-          as: 'categories',
-          through: { attributes: [] },
-        },
-      ],
     },
   );
 
   return post;
+};
+
+const deletePost = async (postId) => {
+  const deletedPost = await BlogPost.destroy({ where: { id: postId } });
+
+  console.log(deletedPost);
+
+  return deletedPost;
 };
 
 module.exports = {
@@ -84,4 +84,5 @@ module.exports = {
   getPostsByUserId,
   getPostById,
   updatePost,
+  deletePost,
 };
