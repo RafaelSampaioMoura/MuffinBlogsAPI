@@ -76,6 +76,7 @@ app.delete(
   postValidations.verifyUser,
   PostController.deletePost,
 );
+app.delete('/user/me', tokenExists, tokenIsValid, UserController.deleteUser);
 
 // É importante exportar a constante `app`,
 // para que possa ser utilizada pelo arquivo `src/server.js`
