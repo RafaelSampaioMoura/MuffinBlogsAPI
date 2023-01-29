@@ -1,5 +1,5 @@
 const camelize = require('camelize');
-const { BlogPost, PostCategory } = require('../models');
+const { BlogPost, PostCategory, User, Category } = require('../models');
 
 const createNewPost = async ({ title, content, categoryIds }, id) => {
   //   console.log(userId);
@@ -28,6 +28,23 @@ const createNewPost = async ({ title, content, categoryIds }, id) => {
   return camelize(dataValues);
 };
 
+const getPostsByUserId = async (userId) => {
+  const posts = await BlogPost.findAll({
+    where: { userId },
+    include: [
+      { model: User, as: 'user', attributes: { exclude: ['password'] } },
+      {
+        model: Category,
+        as: 'categories',
+        through: { attributes: [] },
+      },
+    ],
+  });
+
+  return posts;
+};
+
 module.exports = {
   createNewPost,
+  getPostsByUserId,
 };

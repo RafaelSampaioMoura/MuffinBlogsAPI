@@ -25,6 +25,7 @@ app.get(
   tokenIsValid,
   CategoryController.getAllCategories,
 );
+app.get('/post', tokenExists, tokenIsValid, PostController.getPostsByUserId);
 
 app.post(
   '/categories',

@@ -5,7 +5,9 @@ const createNewPost = async (req, res) => {
   try {
     const { body, user } = req;
     // const { authorization } = headers;
-    const { dataValues: { id } } = user;
+    const {
+      dataValues: { id },
+    } = user;
     // const {
     //   data: { userId },
     // } = jwt.decode(authorization);
@@ -18,6 +20,22 @@ const createNewPost = async (req, res) => {
   }
 };
 
+const getPostsByUserId = async (req, res) => {
+  try {
+    const { user } = req;
+    const {
+      dataValues: { id },
+    } = user;
+
+    const posts = await PostService.getPostsByUserId(id);
+
+    return res.status(200).json(posts);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   createNewPost,
+  getPostsByUserId,
 };
