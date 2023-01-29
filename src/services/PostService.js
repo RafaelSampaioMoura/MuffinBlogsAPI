@@ -1,5 +1,21 @@
 const camelize = require('camelize');
+const { Op } = require('sequelize');
 const { BlogPost, PostCategory, User, Category } = require('../models');
+
+const getAllPosts = async () => {
+  const posts = await BlogPost.findAll({
+    include: [
+      { model: User, as: 'user', attributes: { exclude: ['password'] } },
+      {
+        model: Category,
+        as: 'categories',
+        through: { attributes: [] },
+      },
+    ],
+  });
+
+  return posts;
+};
 
 const createNewPost = async ({ title, content, categoryIds }, id) => {
   //   console.log(userId);
@@ -60,6 +76,24 @@ const getPostById = async (postId) => {
   return post;
 };
 
+const searchPost = async (text) => {
+  const post = await BlogPost.findAll({
+    where: {
+      [Op.or]: [{ title: text }, { content: text }],
+    },
+    include: [
+      { model: User, as: 'user', attributes: { exclude: ['password'] } },
+      {
+        model: Category,
+        as: 'categories',
+        through: { attributes: [] },
+      },
+    ],
+  });
+
+  return post;
+};
+
 const updatePost = async (postId, { title, content }) => {
   const post = await BlogPost.update(
     { title, content, update: Date.now() },
@@ -80,9 +114,11 @@ const deletePost = async (postId) => {
 };
 
 module.exports = {
+  getAllPosts,
   createNewPost,
   getPostsByUserId,
   getPostById,
   updatePost,
   deletePost,
+  searchPost,
 };

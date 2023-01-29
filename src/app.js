@@ -17,6 +17,7 @@ const app = express();
 
 app.use(express.json());
 
+app.get('/post/search', tokenExists, tokenIsValid, PostController.searchPost);
 app.get('/user/:id', tokenExists, tokenIsValid, UserController.getUserById);
 app.get('/user', tokenExists, tokenIsValid, UserController.getAllUsers);
 app.get(

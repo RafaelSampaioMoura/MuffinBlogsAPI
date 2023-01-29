@@ -46,6 +46,29 @@ const getPostById = async (req, res) => {
   }
 };
 
+const searchPost = async (req, res) => {
+  try {
+    const { q } = req.query;
+
+    console.log(q);
+
+    if (q.length === 0) {
+      const posts = await PostService.getAllPosts();
+
+      return res.status(200).json(posts);
+    }
+
+    const post = await PostService.searchPost(q);
+
+    if (!post) {
+      return res.status(200).json([]);
+    }
+    return res.status(200).json(post);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
 const updatePost = async (req, res) => {
   try {
     const { body, params } = req;
@@ -76,4 +99,5 @@ module.exports = {
   getPostById,
   updatePost,
   deletePost,
+  searchPost,
 };
