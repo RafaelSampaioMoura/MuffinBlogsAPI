@@ -1,8 +1,14 @@
 const express = require('express');
-const { Login, UserController, CategoryController } = require('./controllers');
+const {
+  Login,
+  UserController,
+  CategoryController,
+  PostController,
+} = require('./controllers');
 const loginValidation = require('./middlewares/loginValidations');
 const newUserValidations = require('./middlewares/newUserValidations');
 const categoryValidations = require('./middlewares/categoryValidations');
+const postValidations = require('./middlewares/postValidations');
 const { tokenExists, tokenIsValid } = require('./auth/validateJWT');
 
 // ...
@@ -34,6 +40,14 @@ app.post(
   newUserValidations.validateEmail,
   newUserValidations.validatePassword,
   UserController.createUser,
+);
+app.post(
+  '/post',
+  tokenExists,
+  tokenIsValid,
+  postValidations.hasAllFields,
+  postValidations.allCategoriesExist,
+  PostController.createNewPost,
 );
 
 // É importante exportar a constante `app`,

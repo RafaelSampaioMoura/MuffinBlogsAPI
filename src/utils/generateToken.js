@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const secret = process.env.JWT_SECRET || 'maçãemel';
 
 const jwtConfig = {
-  expiresIn: '30m',
+  expiresIn: '7d',
   algorithm: 'HS256',
 };
 
