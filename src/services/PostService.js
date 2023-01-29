@@ -1,5 +1,5 @@
-const camelize = require("camelize");
-const { BlogPost, PostCategory, User, Category } = require("../models");
+const camelize = require('camelize');
+const { BlogPost, PostCategory, User, Category } = require('../models');
 
 const createNewPost = async ({ title, content, categoryIds }, id) => {
   //   console.log(userId);
@@ -32,10 +32,10 @@ const getPostsByUserId = async (userId) => {
   const posts = await BlogPost.findAll({
     where: { userId },
     include: [
-      { model: User, as: "user", attributes: { exclude: ["password"] } },
+      { model: User, as: 'user', attributes: { exclude: ['password'] } },
       {
         model: Category,
-        as: "categories",
+        as: 'categories',
         through: { attributes: [] },
       },
     ],
@@ -48,10 +48,10 @@ const getPostById = async (postId) => {
   const post = await BlogPost.findOne({
     where: { id: postId },
     include: [
-      { model: User, as: "user", attributes: { exclude: ["password"] } },
+      { model: User, as: 'user', attributes: { exclude: ['password'] } },
       {
         model: Category,
-        as: "categories",
+        as: 'categories',
         through: { attributes: [] },
       },
     ],
@@ -60,8 +60,28 @@ const getPostById = async (postId) => {
   return post;
 };
 
+const updatePost = async (postId, { title, content }) => {
+  const post = await BlogPost.update(
+    { title, content, update: Date.now() },
+    {
+      where: { id: postId },
+      include: [
+        { model: User, as: 'user', attributes: { exclude: ['password'] } },
+        {
+          model: Category,
+          as: 'categories',
+          through: { attributes: [] },
+        },
+      ],
+    },
+  );
+
+  return post;
+};
+
 module.exports = {
   createNewPost,
   getPostsByUserId,
-  getPostById
+  getPostById,
+  updatePost,
 };

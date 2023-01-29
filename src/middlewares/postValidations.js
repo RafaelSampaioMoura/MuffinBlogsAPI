@@ -1,5 +1,5 @@
-const CategoryService = require("../services/CategoryService");
-const PostService = require("../services/PostService");
+const CategoryService = require('../services/CategoryService');
+const PostService = require('../services/PostService');
 
 const hasAllFields = async (req, res, next) => {
   const { body } = req;
@@ -16,7 +16,7 @@ const hasAllFields = async (req, res, next) => {
     next();
   } else {
     return res.status(400).json({
-      message: "Some required fields are missing",
+      message: 'Some required fields are missing',
     });
   }
 };
@@ -25,7 +25,7 @@ const allCategoriesExist = async (req, res, next) => {
   const { categoryIds } = req.body;
   const categoriesFromModel = await CategoryService.getAllCategories();
   const categoryIdsInsideModel = categoriesFromModel.map(
-    (category) => category.id
+    (category) => category.id,
   );
 
   const checkCategoryIds = categoryIds.map((categoryId) => {
@@ -44,17 +44,30 @@ const allCategoriesExist = async (req, res, next) => {
   }
 };
 
+const verifyUser = async (req, res, next) => {
+  const { id } = req.user.dataValues;
+  const post = await PostService.getPostById(id);
+
+  if (id !== post.userId) {
+    return res.status(401).json({
+      message: 'Unauthorized user',
+    });
+  }
+
+  next();
+};
+
 const postExists = async (req, res, next) => {
   const { id } = req.params;
   const post = await PostService.getPostById(id);
 
   if (!post) {
     return res.status(404).json({
-      message: "Post does not exist",
+      message: 'Post does not exist',
     });
-  };
+  }
 
   next();
 };
 
-module.exports = { hasAllFields, allCategoriesExist, postExists };
+module.exports = { hasAllFields, allCategoriesExist, postExists, verifyUser };

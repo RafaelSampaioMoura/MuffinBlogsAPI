@@ -1,5 +1,5 @@
 // const jwt = require('jsonwebtoken');
-const PostService = require("../services/PostService");
+const PostService = require('../services/PostService');
 
 const createNewPost = async (req, res) => {
   try {
@@ -46,8 +46,23 @@ const getPostById = async (req, res) => {
   }
 };
 
+const updatePost = async (req, res) => {
+  try {
+    const { body, params, user } = req;
+    console.log(user);
+    const { id } = params;
+    await PostService.updatePost(id, body);
+    const updatedPost = await PostService.getPostById(id);
+
+    return res.status(200).json(updatedPost);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   createNewPost,
   getPostsByUserId,
   getPostById,
+  updatePost,
 };
